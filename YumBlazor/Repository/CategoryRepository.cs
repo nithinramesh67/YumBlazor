@@ -38,7 +38,7 @@ namespace YumBlazor.Repository
 			return obj;
 		}
 
-		public IEnumerable<Category> GetAll(int id)
+		public IEnumerable<Category> GetAll()
 		{
 			return _db.Category.ToList();
 		}

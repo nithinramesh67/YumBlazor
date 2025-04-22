@@ -8,6 +8,6 @@ namespace YumBlazor.Repository.IRepository
 		public Category Update(Category obj);
 		public bool Delete(int id);
 		public Category Get(int id);
-		public IEnumerable<Category> GetAll(int id);
+		public IEnumerable<Category> GetAll();
 	}
 }
