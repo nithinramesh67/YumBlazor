@@ -2,7 +2,7 @@
 @inject ICategoryRepository _categoryRepository
 @inject IJSRuntime _JS
 
-<YumBlazor.Components.BsModel></YumBlazor.Components.BsModel>
+<BsModel OnModalConfirmation="ConfirmDelete_Click"></BsModel>
 @if (IsProcessing)
 {
 	<div class="position-absolute w-75 h-75 d-flex flex-column align-items-center bg-white justify-content-center">
@@ -83,14 +83,33 @@ else
 		}
 		//return base.OnAfterRenderAsync(firstRender);
 	}
+
 	private async Task LoadCategories()
 	{
 		// Simulate loading categories from a repository
 		Categories = await _categoryRepository.GetAllAsync();
 	}
+
 	private void HandleDelete(int id)
 	{
 		DeleteCategoryID = id;
 		_JS.InvokeVoidAsync("ShowConfirmationModal");
+	}
+
+	private async Task ConfirmDelete_Click(bool isConfirmed)
+	{
+		IsProcessing = true;
+		await _JS.InvokeVoidAsync("HideConfirmationModal");
+		if(isConfirmed && DeleteCategoryID != 0)
+		{
+			var result = await _categoryRepository.DeleteAsync(DeleteCategoryID);
+			if(result)
+				_JS?.ToastrSuccess("Category Deleted Successfully");
+			else
+				_JS?.ToastrError("Error Encountered while deleting");
+			await LoadCategories();
+		}
+		DeleteCategoryID = 0;
+		IsProcessing = false;
 	}
 }

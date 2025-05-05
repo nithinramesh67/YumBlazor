@@ -8,12 +8,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <button type="button" class="btn btn-lg btn-secondary" data-bs-dismiss="modal"
-                         style="width:150px;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                         style="width:150px;" @onclick="()=>ConfirmationClicked(false)">
                     Close
                 </button>
-                <button type="button" class="btn btn-lg  style="width:150px;">
-                    ButtonText
+                <button type="button" class="btn btn-primary"  style="width:150px;"
+                @onclick="()=>ConfirmationClicked(true)">
+                    Delete 
                 </button>
             </div>
 
@@ -21,3 +22,15 @@
     </div>
 </div>
 
+@code {
+    [Parameter]
+    public EventCallback<bool> OnModalConfirmation { get; set; }
+
+    private async Task ConfirmationClicked(bool value)
+    {
+        if (value)
+        {
+            await OnModalConfirmation.InvokeAsync(true);
+        }
+    }
+}
